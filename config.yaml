@@ -1,0 +1,273 @@
+# ----------------------------------------------------------------------------
+# Job Radar config. Tuned for a team of 8 engineers whose portfolio spans:
+#   NestJS/Next.js/React · AI agents (LangGraph/MCP/RAG) · Web3 (TON/Solana/
+#   Ethereum, Telegram Mini App) · payment infra · multi-tenant SaaS ·
+#   ClickHouse-scale data.
+# ----------------------------------------------------------------------------
+
+# Only send jobs that reach this total score. Raise to reduce noise.
+min_score: 55
+
+# How many hours back is considered "fresh".
+max_age_hours: 72
+
+# HARD GATE: job must match at least one keyword from `primary_stack` OR
+# `portfolio_specialty` groups below. Prevents alerts on jobs that only
+# match generic signals like "team" or "remote".
+require_stack_match: true
+
+# Per-source toggle.
+sources:
+  hackernews: true
+  remoteok: true
+  remotive: true
+  weworkremotely: true
+  reddit: false         # Reddit blocks unauthenticated scraping (needs OAuth)
+  upwork: false         # Public RSS deprecated (410 Gone) — need official API
+  freelancer: true
+  peopleperhour: true
+  guru: false           # 403 anti-bot on RSS
+
+# User priority: Freelancer.com jobs get a scoring boost so they float to top.
+source_boost:
+  freelancer: 20
+  hackernews: 5
+  remoteok: 5
+  remotive: 5
+  weworkremotely: 5
+  peopleperhour: 3
+
+reddit_subs:
+  - forhire
+  - hireaprogrammer
+  - jobbit
+  - remotejs
+
+# Applied to search-based sources (Freelancer, HN comment filter).
+search_queries:
+  - nestjs
+  - "next.js"
+  - "react developer"
+  - "node.js team"
+  - "telegram mini app"
+  - "web3 developer"
+  - "ai agent"
+  - "langchain"
+  - "solana developer"
+
+# ----------------------------------------------------------------------------
+# Scoring keywords. Each match adds `weight` to the job's score.
+# Case-insensitive substring match against title + description.
+# ----------------------------------------------------------------------------
+scoring:
+  # HIGHEST value: things the team has PRODUCTION EXPERIENCE in per portfolio
+  # (case studies: Padton GameFi, EVSafe, multi-tenant logistics, BI @ 100TB,
+  # payment infra @ 1M subs, AI legal agent, HR portal @ 10k employees).
+  portfolio_specialty:
+    weight: 30
+    keywords:
+      # AI agents
+      - langgraph
+      - langchain
+      - "ai agent"
+      - "ai agents"
+      - "llm agent"
+      - "agentic"
+      - rag
+      - "mcp server"
+      - "model context protocol"
+      - "vector db"
+      - pgvector
+      # Web3 / Telegram
+      - "telegram mini app"
+      - "mini app"
+      - solana
+      - ethereum
+      - "ton blockchain"
+      - "ton network"
+      - "smart contract"
+      - web3
+      - defi
+      - gamefi
+      - "token presale"
+      - staking
+      - "multi-chain"
+      # Payment infra
+      - stripe
+      - "google play billing"
+      - "apple in-app purchase"
+      - subscription
+      - "recurring billing"
+      - "saga pattern"
+      - "distributed lock"
+      - idempotency
+      - "transactional outbox"
+      # Multi-tenant SaaS
+      - "multi-tenant"
+      - multitenant
+      - "multi tenant"
+      - "hexagonal architecture"
+      - "clean architecture"
+      - "domain-driven"
+      # Data at scale
+      - clickhouse
+      - "real-time dashboard"
+      - "bi platform"
+      - "event-driven"
+      - kafka
+      - temporal
+      - bullmq
+      - elasticsearch
+      # Infra / IoT
+      - kubernetes
+      - mqtt
+      - "azure service bus"
+      # Salesforce (case study)
+      - "salesforce integration"
+
+  # Primary stack — team's daily bread
+  primary_stack:
+    weight: 20
+    keywords:
+      - nestjs
+      - "nest.js"
+      - "next.js"
+      - nextjs
+      - "react.js"
+      - reactjs
+      - "react native"
+      - "node.js"
+      - nodejs
+      - typescript
+      - postgres
+      - postgresql
+      - redis
+      - docker
+      - flutter
+
+  # Client wants a TEAM not a single freelancer
+  team_signals:
+    weight: 22
+    keywords:
+      - agency
+      - "team of"
+      - "development team"
+      - "engineering team"
+      - "dedicated developers"
+      - "dedicated team"
+      - "dedicated developer"
+      - "staff augmentation"
+      - "long-term"
+      - "long term"
+      - retainer
+      - outsource
+      - offshore
+      - "ongoing project"
+
+  # Serious money signals
+  budget_signals:
+    weight: 12
+    keywords:
+      - "$30/hr"
+      - "$40/hr"
+      - "$50/hr"
+      - "$60/hr"
+      - "$70/hr"
+      - "$80/hr"
+      - "$100/hr"
+      - "$3000"
+      - "$5000"
+      - "$10000"
+      - "$15,000"
+      - "$20,000"
+      - "$50,000"
+
+  # Weak positive signals
+  remote:
+    weight: 3
+    keywords:
+      - "fully remote"
+      - "work from anywhere"
+      - worldwide
+      - "remote-first"
+
+  # HARD BLACKLIST — job is dropped entirely if ANY of these match.
+  # (word-boundary match — "rag" won't match "storage")
+  blacklist:
+    # Location/citizenship restrictions
+    - "w2 only"
+    - "w-2 only"
+    - "us citizen"
+    - "u.s. citizen"
+    - "us citizens only"
+    - "security clearance"
+    - "onsite only"
+    - "on-site only"
+    - "on site only"
+    - "must be located in"
+    - "must live in"
+    - "must be based in"
+    - "must be in the us"
+    - "must be in usa"
+    - "green card holders only"
+    # Anti-agency phrasing
+    - "no agencies"
+    - "no agency"
+    - "no outsourcing"
+    - "individual freelancer only"
+    - "individuals only"
+    - "no third party"
+    - "no third-party"
+    # Full-time employee markers — these are job openings, not outsource RFPs
+    - "equity grant"
+    - "stock options"
+    - "rsu"
+    - "401k"
+    - "401(k)"
+    - "visa sponsorship"
+    - "h1b"
+    - "h-1b"
+    - "relocation package"
+    - "pto"
+    - "paid time off"
+    - "medical insurance"
+    - "dental insurance"
+    - "health insurance"
+    - "salary range"
+    - "annual salary"
+    - "base salary"
+    - "compensation package"
+    # Out of scope for the team
+    - "wordpress theme"
+    - "wordpress plugin developer"
+    - "wp theme"
+    - "elementor"
+    - "divi builder"
+    - "shopify theme"
+    - "shopify template"
+    - "wix expert"
+    - "squarespace"
+    - "webflow developer"
+    - "seo expert"
+    - "seo specialist"
+    - "content writer"
+    - "content writing"
+    - "blog writer"
+    - "article writer"
+    - "copywriter needed"
+    - "data entry"
+    - "virtual assistant"
+    - "transcription"
+    - "logo design"
+    - "graphic design"
+    - "video editing"
+    - "video editor"
+    - "photo editing"
+    - "photoshop expert"
+    - "excel expert"
+    - "vba macro"
+    - "unity game"
+    - "unreal engine game"
+    - "3d modeling"
+    - "3d animation"
+    - "illustrator"

@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+logs/
+# NOTE: storage.db is committed on purpose when deploying via GitHub Actions
+# (workflow commits it back so dedup state persists between runs).
+# For local-only use, uncomment the next line:
+# storage.db
