@@ -27,15 +27,21 @@ sources:
   freelancer: true
   peopleperhour: true
   guru: false           # 403 anti-bot on RSS
+  linkedin: true        # Guest endpoint — HTML cards, no auth
+  vlance: true          # VN freelance — RSS feed
+  threads: true        # Unofficial embedded-JSON parse, brittle (enable to test)
 
-# User priority: Freelancer.com jobs get a scoring boost so they float to top.
+# User priority: Freelancer.com + Vlance float to top.
 source_boost:
   freelancer: 20
+  vlance: 20
+  linkedin: 10
   hackernews: 5
   remoteok: 5
   remotive: 5
   weworkremotely: 5
   peopleperhour: 3
+  threads: 5
 
 reddit_subs:
   - forhire
@@ -43,17 +49,28 @@ reddit_subs:
   - jobbit
   - remotejs
 
-# Applied to search-based sources (Freelancer, HN comment filter).
+# Applied to search-based sources (Freelancer, LinkedIn, Vlance,
+# FreelancerViet, Threads, HN comment filter). JS stack prioritised.
 search_queries:
+  - nodejs
   - nestjs
   - "next.js"
+  - reactjs
   - "react developer"
   - "node.js team"
+  - typescript
+  - fullstack
   - "telegram mini app"
   - "web3 developer"
   - "ai agent"
   - "langchain"
   - "solana developer"
+  # Vietnamese team / RFP signals (hit Vlance/FreelancerViet/Threads)
+  - "thuê dev"
+  - "tuyển team"
+  - "nhận dự án"
+  - "cần tìm dev"
+  - "outsource"
 
 # ----------------------------------------------------------------------------
 # Scoring keywords. Each match adds `weight` to the job's score.
@@ -125,9 +142,9 @@ scoring:
       # Salesforce (case study)
       - "salesforce integration"
 
-  # Primary stack — team's daily bread
+  # Primary stack — team's daily bread. JS stack weighted higher per user ask.
   primary_stack:
-    weight: 20
+    weight: 25
     keywords:
       - nestjs
       - "nest.js"
@@ -139,6 +156,9 @@ scoring:
       - "node.js"
       - nodejs
       - typescript
+      - "express.js"
+      - expressjs
+      - fastify
       - postgres
       - postgresql
       - redis
@@ -163,6 +183,21 @@ scoring:
       - outsource
       - offshore
       - "ongoing project"
+      # Vietnamese RFP / team signals — Vlance / FreelancerViet / Threads
+      - "thuê dev"
+      - "thuê team"
+      - "thuê đội"
+      - "tuyển team"
+      - "cần tìm team"
+      - "cần tìm dev"
+      - "nhận dự án"
+      - "nhận outsource"
+      - "cần thuê"
+      - "làm dự án"
+      - "đội ngũ"
+      - "freelance"
+      - "freelancer"
+      - "làm remote"
 
   # Serious money signals
   budget_signals:

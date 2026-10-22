@@ -1,6 +1,6 @@
 # Job Radar
 
-Quét bài đăng outsource/remote từ 9 nguồn → score theo stack của team → bắn qua Telegram.
+Quét bài đăng outsource/remote từ 12 nguồn (US/EU + VN + LinkedIn + Threads) → score theo stack JS/Node của team → bắn qua Telegram.
 
 ## Nguồn đã tích hợp
 
@@ -15,6 +15,17 @@ Quét bài đăng outsource/remote từ 9 nguồn → score theo stack của tea
 | Freelancer.com | Public API | không |
 | PeoplePerHour | RSS | không |
 | Guru | RSS | không |
+| **LinkedIn (jobs-guest)** | HTML cards, keyword × {Vietnam, Worldwide} | không |
+| **Vlance.vn** (VN freelance RFP) | RSS feed | không |
+| **Threads** (keyword scan) | Embedded JSON parse, hashtag + search | không (unofficial) |
+
+> **LinkedIn** dùng guest endpoint `/jobs-guest/jobs/api/seeMoreJobPostings/search`. Rate limit nghiêm → scraper tự throttle 1.2s giữa request. Query set giới hạn ở JS stack (xem `scrapers/linkedin.py :: JS_STACK_QUERIES`).
+>
+> **Vlance.vn** dùng RSS global (không có filter theo keyword). Scoring layer sẽ lọc theo stack keywords.
+>
+> **FreelancerViet** đã khảo sát — là JS SPA thuần, không scrape được từ HTML nếu không có Playwright → bỏ.
+>
+> **Threads:** parse JSON embed trong HTML search/hashtag page. Meta có thể đổi schema bất cứ lúc nào → mặc định **tắt** trong `config.yaml`, bật khi muốn test.
 
 ## Setup (một lần)
 
