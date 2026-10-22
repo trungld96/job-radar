@@ -11,7 +11,9 @@
       "Bash(.venv/Scripts/python.exe -c \"from scrapers import ALL_SCRAPERS; print\\(list\\(ALL_SCRAPERS.keys\\(\\)\\)\\)\")",
       "Bash(.venv/Scripts/python.exe -c ' *)",
       "Bash(.venv/Scripts/python.exe main.py --dry-run --top 15)",
-      "Bash(.venv/Scripts/python.exe main.py --dry-run --top 5)"
+      "Bash(.venv/Scripts/python.exe main.py --dry-run --top 5)",
+      "Bash(git checkout *)",
+      "Bash(git add *)"
     ]
   }
 }

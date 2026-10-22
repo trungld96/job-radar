@@ -1,0 +1,183 @@
+# ----------------------------------------------------------------------------
+# IT Trend Radar — tracks hot products/launches in the IT/dev space from:
+#   Product Hunt · Hacker News (front page + Show HN) · GitHub Trending ·
+#   Exploding Topics (best-effort via public RSS).
+# Alerts fire to a SEPARATE Telegram chat (TELEGRAM_TRENDS_CHAT_ID in .env).
+# ----------------------------------------------------------------------------
+
+# Items older than this (hours) are dropped. GitHub Trending items have no
+# timestamp and are let through.
+max_age_hours: 48
+
+# Hard gate: require at least one `it_keywords` match on title/description/tags.
+require_it_match: true
+
+# Soft cap on raw items fetched per source (before filtering).
+max_items_per_source: 40
+
+sources:
+  producthunt: true
+  hackernews: true
+  github_trending: true
+  exploding_topics: true     # best-effort; silently skips if feed is down
+
+# GitHub Trending languages to pull. Empty string "" = all languages.
+# Keep this short — each entry is one extra HTTP request.
+github_languages:
+  - ""            # all languages (overall trending)
+  - typescript
+  - python
+  - rust
+  - go
+
+# ----------------------------------------------------------------------------
+# IT / dev keywords. Case-insensitive. Short tokens (<=4 chars) use
+# word-boundary matching to avoid false positives (e.g. "ai" won't match
+# "chair"); longer tokens use substring match.
+# ----------------------------------------------------------------------------
+it_keywords:
+  # AI / LLM
+  - ai
+  - llm
+  - gpt
+  - claude
+  - gemini
+  - agent
+  - agents
+  - agentic
+  - rag
+  - mcp
+  - langchain
+  - langgraph
+  - vector
+  - embedding
+  - embeddings
+  - fine-tune
+  - fine tuning
+  - inference
+  - prompt
+  - transformer
+  - diffusion
+  - multimodal
+  - ocr
+  - speech
+  # Languages & runtimes
+  - typescript
+  - javascript
+  - nodejs
+  - node.js
+  - deno
+  - bun
+  - python
+  - rust
+  - golang
+  - "go lang"
+  - zig
+  - kotlin
+  - swift
+  - elixir
+  - wasm
+  - webassembly
+  # Frameworks
+  - react
+  - next.js
+  - nextjs
+  - nestjs
+  - svelte
+  - sveltekit
+  - solid
+  - astro
+  - remix
+  - vue
+  - nuxt
+  - tanstack
+  - tailwind
+  - shadcn
+  # Backend / data
+  - postgres
+  - postgresql
+  - mysql
+  - sqlite
+  - redis
+  - clickhouse
+  - duckdb
+  - kafka
+  - elasticsearch
+  - prisma
+  - drizzle
+  - orm
+  - graphql
+  - trpc
+  - supabase
+  - firebase
+  # Infra / cloud / devops
+  - docker
+  - kubernetes
+  - k8s
+  - serverless
+  - edge
+  - cloudflare
+  - vercel
+  - netlify
+  - aws
+  - gcp
+  - azure
+  - terraform
+  - helm
+  - observability
+  - monitoring
+  - telemetry
+  - opentelemetry
+  - prometheus
+  - grafana
+  # Dev experience
+  - devtool
+  - developer tool
+  - developer tools
+  - sdk
+  - api
+  - cli
+  - terminal
+  - ide
+  - plugin
+  - extension
+  - framework
+  - library
+  - compiler
+  - runtime
+  - linter
+  - formatter
+  - debugger
+  - testing
+  - benchmark
+  - open source
+  - open-source
+  # Web3 / crypto
+  - web3
+  - blockchain
+  - solana
+  - ethereum
+  - "ton blockchain"
+  - telegram mini app
+  - smart contract
+  - defi
+  - zk
+  - zero-knowledge
+  # Security
+  - security
+  - auth
+  - oauth
+  - zero trust
+  - sast
+  - sbom
+  - supply chain
+  # Product shapes
+  - saas
+  - platform
+  - workflow
+  - automation
+  - no-code
+  - low-code
+  - rpa
+  - dashboard
+  - analytics
